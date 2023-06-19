@@ -57,34 +57,40 @@ class TranslationController extends Controller
     /**
      * Create a single translation with its labels
      */
-    public function store(Request $request): JsonResource
+    public function store(Request $request): JsonResource|JsonResponse
     {
         $attributes = $request->validate([
             'key' => ['string', 'required', 'max:255', 'unique:translations,key'],
             'labels' => ['required', 'array', $this->_validateLabels()]
         ]);
 
-        DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
-        $translation = Translation::create([
-            'key' => $request->input('key')
-        ]);
+            $translation = Translation::create([
+                'key' => $request->input('key')
+            ]);
 
-        $translation->labels()->createMany(
-            collect(
-                data_get($attributes, 'labels')
-            )
-                ->map(function(string $value, string $key) {
-                    return [
-                        'lang' => $key,
-                        'text' => $value
-                    ];
-                })
-                ->values()
-                ->toArray()
-        );
+            $translation->labels()->createMany(
+                collect(
+                    data_get($attributes, 'labels')
+                )
+                    ->map(function (string $value, string $key) {
+                        return [
+                            'lang' => $key,
+                            'text' => $value
+                        ];
+                    })
+                    ->values()
+                    ->toArray()
+            );
 
-        DB::commit();
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json(['message' => 'Error during translation creation'], 500);
+        }
 
         // if an exception gets thrown the root handler will catch it
         // and will render the correct json
@@ -95,7 +101,7 @@ class TranslationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Translation $translation)
+    public function update(Request $request, Translation $translation): JsonResource|JsonResponse
     {
         // this is a temporary workaround for the demo purposes only
         // to fix it properly, the web server should have the APFD extension enabled
@@ -127,28 +133,34 @@ class TranslationController extends Controller
 
         $labels = $translation->labels->keyBy('lang');
 
-        DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
-        foreach (array_keys($attributes) as $lang) {
-            $label = $labels->get($lang);
+            foreach (array_keys($attributes) as $lang) {
+                $label = $labels->get($lang);
 
-            $newText = $attributes[$lang];
+                $newText = $attributes[$lang];
 
-            if ($label) {
-                $label->update([
-                    'text' => $attributes[$lang]
+                if ($label) {
+                    $label->update([
+                        'text' => $attributes[$lang]
+                    ]);
+
+                    continue;
+                }
+
+                $translation->labels()->create([
+                    'lang' => $lang,
+                    'text' => $newText
                 ]);
-
-                continue;
             }
 
-            $translation->labels()->create([
-                'lang' => $lang,
-                'text' => $newText
-            ]);
-        }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
 
-        DB::commit();
+            return response()->json(['message' => 'Error during translation update'], 500);
+        }
 
         return TranslationResource::make($translation->refresh());
     }
