@@ -17,7 +17,9 @@ use App\Http\Controllers\TranslationController;
 
 Route::apiResource('translation', TranslationController::class)
     ->only([
-        'index'
+        'index',
+        'show',
+        'store',
     ])
     ->scoped([
         'translation' => 'key'

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TranslationResource;
 use App\Models\Translation;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\DB;
 
 /**
  * @group Endpoints v1
@@ -25,42 +27,53 @@ class TranslationController extends Controller
      */
     public function index(): ResourceCollection
     {
-        $entries = Translation::all();
+        $entries = Translation::with([
+            'labels'
+        ])->all();
 
         return TranslationResource::collection($entries);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Get the specified translation
+     *
+     * @urlParam key string required The key that references the translation. Example: main-text
+     *
+     * @apiResourceModel App\Models\Translation
      */
-    public function create()
+    public function show(Translation $translation): JsonResource
     {
-        //
+        $translation->with([
+            'labels'
+        ]);
+
+        return TranslationResource::make($translation);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create a single translation with its labels
+     *
+     * @bodyParam key string required The key that references the translation. Example: main-text
+     *
+     * @apiResourceModel App\Models\Translation
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResource
     {
-        //
+        $request->validate([
+            'key' => ['string', 'required', 'max:255', 'unique:translations,key'],
+        ]);
+
+        DB::beginTransaction();
+
+        $translation = Translation::create([
+            'key' => $request->input('key')
+        ]);
+
+        DB::commit();
+
+        return TranslationResource::make($translation);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Translation $translation)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Translation $translation)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

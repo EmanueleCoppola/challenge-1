@@ -9,6 +9,8 @@ class Translation extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
