@@ -15,11 +15,14 @@ use App\Http\Controllers\TranslationController;
 |
 */
 
+// Route::patch('translation/{translation:key}', 'UserController@ updateRolesPermissions');
 Route::apiResource('translation', TranslationController::class)
     ->only([
         'index',
         'show',
         'store',
+        'update',
+        'destroy'
     ])
     ->scoped([
         'translation' => 'key'

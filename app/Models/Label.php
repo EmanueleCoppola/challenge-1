@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Translation extends Model
+class Label extends Model
 {
     use HasFactory;
 
@@ -17,8 +17,8 @@ class Translation extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
-    public function labels(): HasMany
+    public function translation(): BelongsTo
     {
-        return $this->hasMany(Label::class, 'translation_id', 'id');
+        return $this->belongsTo(Translation::class, 'translation_id', 'id');
     }
 }

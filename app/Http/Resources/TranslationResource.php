@@ -19,7 +19,8 @@ class TranslationResource extends JsonResource
         $translation = $this->resource;
 
         return [
-            'key' => $translation->key
+            'key' => $translation->key,
+            'labels' => $this->labels->pluck('text', 'lang')
         ];
     }
 }
