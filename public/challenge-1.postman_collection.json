@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "9bdf1be4-8126-4d58-bb38-6f71d48452a8",
+		"name": "Challenge 1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api/translation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "key",
+							"value": "home",
+							"type": "default"
+						},
+						{
+							"key": "labels[it]",
+							"value": "Casa",
+							"type": "default"
+						},
+						{
+							"key": "labels[en]",
+							"value": "Home",
+							"type": "default"
+						},
+						{
+							"key": "labels[fr]",
+							"value": "Maison",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://challenge-1.emanuelecoppola.it/api/translation",
+					"protocol": "https",
+					"host": [
+						"challenge-1",
+						"emanuelecoppola",
+						"it"
+					],
+					"path": [
+						"api",
+						"translation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/translation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://challenge-1.emanuelecoppola.it/api/translation",
+					"protocol": "https",
+					"host": [
+						"challenge-1",
+						"emanuelecoppola",
+						"it"
+					],
+					"path": [
+						"api",
+						"translation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/translation/{key}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://challenge-1.emanuelecoppola.it/api/translation/home",
+					"protocol": "https",
+					"host": [
+						"challenge-1",
+						"emanuelecoppola",
+						"it"
+					],
+					"path": [
+						"api",
+						"translation",
+						"home"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/translation/{key}",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "_method",
+							"value": "PUT",
+							"type": "default"
+						},
+						{
+							"key": "it",
+							"value": "Casa",
+							"type": "default"
+						},
+						{
+							"key": "en",
+							"value": "House",
+							"type": "default"
+						},
+						{
+							"key": "fr",
+							"value": "Maison",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://challenge-1.emanuelecoppola.it/api/translation/home",
+					"protocol": "https",
+					"host": [
+						"challenge-1",
+						"emanuelecoppola",
+						"it"
+					],
+					"path": [
+						"api",
+						"translation",
+						"home"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "api/translation/{key}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://challenge-1.emanuelecoppola.it/api/translation/home",
+					"protocol": "https",
+					"host": [
+						"challenge-1",
+						"emanuelecoppola",
+						"it"
+					],
+					"path": [
+						"api",
+						"translation",
+						"home"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
