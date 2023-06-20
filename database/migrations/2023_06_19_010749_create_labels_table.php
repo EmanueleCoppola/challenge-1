@@ -16,14 +16,14 @@ return new class extends Migration
 
             $table->string('lang');
 
-            $table->index([
-                'id', 'lang'
-            ]);
-
             $table
                 ->foreignId('translation_id')
                 ->constrained('translations')
                 ->onDelete('cascade');
+
+            $table->index([
+                'translation_id', 'lang'
+            ]);
 
             $table->text('text');
             $table->timestamps();
